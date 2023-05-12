@@ -33,3 +33,5 @@ Route.group(() => {
 }).middleware('auth')
 
 Route.get('/', 'BlogsController.index').as('home')
+Route.get('/login', 'SecurityController.login').as('login')
+Route.post('/login', 'SecurityController.doLogin')
