@@ -1,10 +1,21 @@
 <form action="" method="post" enctype="multipart/form-data">
-    <div class="mb-3">
-        @!component('components/input', {
-        label: 'Titre',
-        name: 'title',
-        value: post.title
-        })
+
+    <div class="row mb-3">
+        <div class="col">
+            @!component('components/input', {
+            label: 'Titre',
+            name: 'title',
+            value: post.title
+            })
+        </div>
+        <div class="col">
+            @!component('components/input', {
+            label: 'Catégorie',
+            name: 'categoryId',
+            value: post.categoryId,
+            options: categories.reduce((acc, c) => ({...acc, [c.id]: c.name}), {})
+            })
+        </div>
     </div>
 
     <div class="mb-3">

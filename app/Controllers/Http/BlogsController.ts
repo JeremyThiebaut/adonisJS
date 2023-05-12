@@ -1,10 +1,13 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Database from '@ioc:Adonis/Lucid/Database'
+import Category from 'App/Models/Category'
 import Post from 'App/Models/Post'
 import UpdatePostValidator from 'App/Validators/UpdatePostValidator'
 
 export default class BlogsController {
-  public async index({ view }: HttpContextContract) {
-    const posts = await Post.all()
+  public async index({ view, request }: HttpContextContract) {
+    const page = request.input('page', 1)
+    const posts = await Database.from(Post.table).paginate(page, 2)
     return view.render('blog/index', {
       posts,
     })
@@ -12,8 +15,10 @@ export default class BlogsController {
 
   public async create({ view }: HttpContextContract) {
     const post = new Post()
+    const categories = await Category.all()
     return view.render('blog/create', {
       post,
+      categories,
     })
   }
 
@@ -25,8 +30,11 @@ export default class BlogsController {
 
   public async show({ params, view }: HttpContextContract) {
     const post = await Post.findOrFail(params.id)
+    const categories = await Category.all()
+    // const post = await Post.query().preload('category').where('id', params.id).firstOrFail()
     return view.render('blog/show', {
       post,
+      categories,
     })
   }
 

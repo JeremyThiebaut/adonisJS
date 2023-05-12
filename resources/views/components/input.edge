@@ -1,8 +1,15 @@
 <div>
     <label for="{{name}}">{{label}}</label>
-    @if(type === 'textarea')
-    <textarea class="form-control" type="{{type}}" id="{{name}}"
-        name="{{name}}">{{ flashMessages.get(name) || value || ''}}</textarea>
+    @if(options)
+    <select name="{{ name }}" id="{{ name }}" class="form-control {{ flashMessages.has(`errors.${name}`) ? 'is-invalid'
+        : '' }}">
+        @each(key in Object.keys(options))
+        <option value="{{key}}" {{ flashMessages.get(name) || value == key ? 'selected' : '' }}>{{ options[key] }}</option>
+        @endeach
+    </select>
+    @elseif(type === 'textarea')
+    <textarea class="form-control" type="{{type}}" id="{{name}}" name="{{name}}" {{ flashMessages.has(`errors.${name}`)
+        ? 'is-invalid' : '' }}>{{ flashMessages.get(name) || value || ''}}</textarea>
     @else
     <input class="form-control {{ flashMessages.has(`errors.${name}`) ? 'is-invalid' : '' }}" type="text" id="{{name}}"
         name="{{name}}" value="{{ flashMessages.get(name) || value || ''}}">
